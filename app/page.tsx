@@ -327,17 +327,21 @@ export default function MediaRecorderPage() {
 
       {/* Buttons */}
       <div style={{ marginTop: 10 }} className="flex justify-start items-center gap-3">
-        <button onClick={requestStream}
-          disabled={isStreaming}
-          className="border border-white rounded px-2"
-        >Request Stream
-        </button>
-        <button onClick={closeStream}
-          disabled={!isStreaming}
-          className="border border-white rounded px-2"
-        >close Stream
-        </button>
-        
+        {
+          isStreaming ? (
+            <button onClick={closeStream}
+              disabled={!isStreaming}
+              className="border border-white rounded px-2"
+            >close Stream
+            </button>
+          ) : (
+            <button onClick={requestStream}
+              disabled={isStreaming}
+              className="border border-white rounded px-2"
+            >Request Stream
+            </button>
+          )
+        }
         <button
           className="border border-white rounded px-2"
           onClick={startRecording}
