@@ -158,15 +158,18 @@
 
 // secont 2222222222222222222222222222222
 // ======================================
-"use client";
 
+
+"use client";
 import { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay } from "react-icons/fa";
+import { GoDownload } from "react-icons/go";
 
 type MediaKind = "video" | "audio";
 
 export default function MediaRecorderPage() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -291,6 +294,16 @@ export default function MediaRecorderPage() {
     stopTimer();
   };
 
+  // remove recorgin 
+  const removeRecording = (index: number) => {
+    setRecordings((prev) => {
+      // revoke blob URL to avoid memory leak
+      URL.revokeObjectURL(prev[index].url);
+
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
   /* ------------------ CLEANUP ------------------ */
   useEffect(() => {
     return () => {
@@ -404,22 +417,74 @@ export default function MediaRecorderPage() {
         </div>
       )}
 
+      {/* Live video preview */}
+      {mediaType === "audio" && isStreaming && (
+        <div className="mt-6 w-full">
+          {/* Fake audio bar */}
+          <div className="h-2 bg-gray-300 rounded overflow-hidden">
+            <div
+              className="h-full bg-green-500 transition-all"
+              style={{ width: `${(seconds % 60) * 1.6}%` }}
+            />
+          </div>
+
+          {/* AUDIO CONTROLS */}
+          <div className={`${isRecording && "bg-white"} mt-2 flex items-center justify-center gap-2 text-black px-3 py-2 rounded w-fit`}>
+            {isRecording && !isPaused && (
+              <button onClick={pauseRecording}>
+                <FaPause />
+              </button>
+            )}
+
+            {isPaused && (
+              <button onClick={resumeRecording}>
+                <FaPlay />
+              </button>
+            )}
+
+            {isRecording && (
+              <span className="text-sm">{formatTime(seconds)}</span>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Recordings */}
-      <ul>
+      <ul className="mt-4 space-y-4">
         {recordings.map((rec, i) => (
-          <li key={i} style={{ marginTop: 10 }}>
+          <li
+            key={i}
+          >
+            {/* MEDIA */}
             {rec.type === "video" ? (
               <video src={rec.url} controls width={320} />
             ) : (
               <audio src={rec.url} controls />
             )}
-            <br />
-            <a href={rec.url} download>
-              Download
-            </a>
+
+            {/* CONTROLS ROW */}
+            <div className="flex items-center justify-start gap-6 mt-2">
+              {/* DOWNLOAD */}
+              <a href={rec.url} download>
+                <button className="flex items-center gap-1 text-sm cursor-pointer">
+                  Download <GoDownload />
+                </button>
+              </a>
+
+              {/* CLOSE BUTTON */}
+              <button
+                onClick={() => removeRecording(i)}
+                className="text-red-600 font-bold text-xs cursor-pointer px-2 py-1 bg-white rounded"
+                title="Remove"
+              >
+                ✕
+              </button>
+            </div>
           </li>
         ))}
       </ul>
+
+
     </div>
   );
 }
