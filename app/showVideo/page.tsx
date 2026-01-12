@@ -83,6 +83,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/redux/store";
 import { deleteRecording } from "../redux/features/video/videoSlice";
 import { FiTrash2, FiVideo, FiMusic } from "react-icons/fi";
+import Link from "next/link";
+import { GoArrowLeft } from "react-icons/go";
 
 export default function ShowVideo() {
     const dispatch = useDispatch();
@@ -106,81 +108,91 @@ export default function ShowVideo() {
     };
 
     return (
-        <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* ================= VIDEO SECTION ================= */}
-            <section className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center gap-2 mb-5">
-                    <FiVideo className="text-xl text-blue-600" />
-                    <h3 className="text-xl font-semibold">Recorded Videos</h3>
-                </div>
+        <div>
+            <div className="flex justify-center items-center gap-6 mt-10 mb-3">
+                <h2 className="text-2xl font-bold mb-3">See your recordings video here</h2>
+                <Link href="/">
+                    <button className="bg-white px-4 py-2 flex justify-center items-center gap-2 text-black rounded-sm text-sm font-semibold cursor-pointer">
+                        <GoArrowLeft /> Go home 
+                    </button>
+                </Link>
+            </div>
+            <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* ================= VIDEO SECTION ================= */}
+                <section className="bg-white rounded-xl shadow-lg p-6">
+                    <div className="flex items-center gap-2 mb-5">
+                        <FiVideo className="text-xl text-blue-600" />
+                        <h3 className="text-xl font-semibold">Recorded Videos</h3>
+                    </div>
 
-                {recordings.filter((rec) => rec.type === "video").length === 0 && (
-                    <p className="text-sm text-gray-500">No videos recorded yet.</p>
-                )}
+                    {recordings.filter((rec) => rec.type === "video").length === 0 && (
+                        <p className="text-sm text-gray-500">No videos recorded yet.</p>
+                    )}
 
-                <div className="grid sm:grid-cols-2 gap-4">
-                    {recordings
-                        .filter((rec) => rec.type === "video")
-                        .map((rec) => (
-                            <div
-                                key={rec.id}
-                                className="group rounded-lg overflow-hidden border hover:shadow-md transition"
-                            >
-                                <video
-                                    src={rec.url}
-                                    controls
-                                    className="w-full h-48 object-cover bg-black"
-                                />
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        {recordings
+                            .filter((rec) => rec.type === "video")
+                            .map((rec) => (
+                                <div
+                                    key={rec.id}
+                                    className="group rounded-lg overflow-hidden border hover:shadow-md transition"
+                                >
+                                    <video
+                                        src={rec.url}
+                                        controls
+                                        className="w-full h-48 object-cover bg-black"
+                                    />
 
-                                <div className="p-3 flex justify-between items-center">
-                                    <span className="text-sm text-gray-600">
-                                        {/* Video File */}
-                                    </span>
+                                    <div className="p-3 flex justify-between items-center">
+                                        <span className="text-sm text-gray-600">
+                                            {/* Video File */}
+                                        </span>
+
+                                        <button
+                                            onClick={() => handleDelete(rec.id, rec.url)}
+                                            className="flex items-center gap-1 text-sm text-red-600 hover:text-red-700 cursor-pointer"
+                                        >
+                                            <FiTrash2 />
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                    </div>
+                </section>
+
+                {/* ================= AUDIO SECTION ================= */}
+                <section className="bg-white rounded-xl shadow-lg p-6">
+                    <div className="flex items-center gap-2 mb-5">
+                        <FiMusic className="text-xl text-green-600" />
+                        <h3 className="text-xl font-semibold">Recorded Audios</h3>
+                    </div>
+
+                    {recordings.filter((rec) => rec.type === "audio").length === 0 && (
+                        <p className="text-sm text-gray-500">No audios recorded yet.</p>
+                    )}
+
+                    <div className="space-y-4">
+                        {recordings
+                            .filter((rec) => rec.type === "audio")
+                            .map((rec) => (
+                                <div
+                                    key={rec.id}
+                                    className="flex items-center justify-between gap-3 p-4 border rounded-lg hover:shadow-md transition"
+                                >
+                                    <audio src={rec.url} controls className="w-full" />
 
                                     <button
                                         onClick={() => handleDelete(rec.id, rec.url)}
                                         className="flex items-center gap-1 text-sm text-red-600 hover:text-red-700"
                                     >
                                         <FiTrash2 />
-                                        Delete
                                     </button>
                                 </div>
-                            </div>
-                        ))}
-                </div>
-            </section>
-
-            {/* ================= AUDIO SECTION ================= */}
-            <section className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center gap-2 mb-5">
-                    <FiMusic className="text-xl text-green-600" />
-                    <h3 className="text-xl font-semibold">Recorded Audios</h3>
-                </div>
-
-                {recordings.filter((rec) => rec.type === "audio").length === 0 && (
-                    <p className="text-sm text-gray-500">No audios recorded yet.</p>
-                )}
-
-                <div className="space-y-4">
-                    {recordings
-                        .filter((rec) => rec.type === "audio")
-                        .map((rec) => (
-                            <div
-                                key={rec.id}
-                                className="flex items-center justify-between gap-3 p-4 border rounded-lg hover:shadow-md transition"
-                            >
-                                <audio src={rec.url} controls className="w-full" />
-
-                                <button
-                                    onClick={() => handleDelete(rec.id, rec.url)}
-                                    className="flex items-center gap-1 text-sm text-red-600 hover:text-red-700"
-                                >
-                                    <FiTrash2 />
-                                </button>
-                            </div>
-                        ))}
-                </div>
-            </section>
+                            ))}
+                    </div>
+                </section>
+            </div>
         </div>
     );
 }

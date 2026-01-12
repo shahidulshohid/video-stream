@@ -354,10 +354,11 @@
 import { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay } from "react-icons/fa";
 import { FiCheck } from "react-icons/fi";
-import { GoDownload } from "react-icons/go";
+import { GoArrowRight, GoDownload } from "react-icons/go";
 import { useDispatch } from "react-redux";
 import { addRecording } from "@/app/redux/features/video/videoSlice";
 import { v4 as uuidv4 } from "uuid";
+import Link from "next/link";
 
 type MediaKind = "video" | "audio";
 
@@ -545,7 +546,14 @@ export default function VideoStreamWithRedux() {
     /* ------------------ UI ------------------ */
     return (
         <div style={{ maxWidth: 720, margin: "0 auto", padding: 20 }}>
-            <h2 className="text-2xl font-bold mb-3">MediaRecorder – Next.js</h2>
+            <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold mb-3">MediaRecorder – Next.js</h2>
+                <Link href="/showVideo">
+                    <button className="bg-white px-4 py-2 flex justify-center items-center gap-2 text-black rounded-sm text-sm font-semibold cursor-pointer">
+                        See your Recordings <GoArrowRight />
+                    </button>
+                </Link>
+            </div>
 
             {/* Media type */}
             <div>
