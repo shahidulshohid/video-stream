@@ -5,8 +5,8 @@ import VideoStreamWithRedux from './components/videoStreams/videoStreamWithRedux
 function Home() {
   return (
     <div>
-      {/* <MediaRecorderPage/> */}
-      <VideoStreamWithRedux />
+      <MediaRecorderPage/>
+      {/* <VideoStreamWithRedux /> */}
     </div>
   )
 }
