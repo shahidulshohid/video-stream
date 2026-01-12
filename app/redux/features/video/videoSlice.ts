@@ -51,12 +51,46 @@
 
 
 
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-type MediaKind = "video" | "audio";
+// import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+// type MediaKind = "video" | "audio";
 
-export type Recording = {
+// export type Recording = {
+//   url: string;
+//   type: MediaKind;
+// };
+
+// type VideoState = {
+//   recordings: Recording[];
+// };
+
+// const initialState: VideoState = {
+//   recordings: [],
+// };
+
+// const videoSlice = createSlice({
+//   name: "video",
+//   initialState,
+//   reducers: {
+//     addRecording(state, action: PayloadAction<Recording>) {
+//       state.recordings.push(action.payload);
+//       console.log("Recording added in server:", action.payload);
+//     },
+//     removeRecording(state, action: PayloadAction<number>) {
+//       state.recordings.splice(action.payload, 1);
+//     },
+//   },
+// });
+
+// export const { addRecording, removeRecording } = videoSlice.actions;
+// export default videoSlice.reducer;
+
+
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+type Recording = {
+  id: string;
   url: string;
-  type: MediaKind;
+  type: "video" | "audio";
 };
 
 type VideoState = {
@@ -71,15 +105,19 @@ const videoSlice = createSlice({
   name: "video",
   initialState,
   reducers: {
-    addRecording(state, action: PayloadAction<Recording>) {
+    addRecording: (state, action: PayloadAction<Recording>) => {
       state.recordings.push(action.payload);
     },
-    removeRecording(state, action: PayloadAction<number>) {
-      state.recordings.splice(action.payload, 1);
+
+    deleteRecording: (state, action: PayloadAction<string>) => {
+      state.recordings = state.recordings.filter(
+        (rec) => rec.id !== action.payload
+      );
     },
   },
 });
 
-export const { addRecording, removeRecording } = videoSlice.actions;
+export const { addRecording, deleteRecording } = videoSlice.actions;
 export default videoSlice.reducer;
+
 

@@ -701,13 +701,13 @@ export default function VideoStreamWithRedux() {
                                 </button>
                             </a>
                             {/* SAVE BUTTON */}
-                            <button
+                            {/* <button
                                 onClick={() => dispatch(addRecording(rec))}
                                 className="text-green-600 font-bold text-lg cursor-pointer px-2 py-1 bg-white rounded"
                                 title="save"
                             >
                                 <FiCheck />
-                            </button>
+                            </button> */}
                             {/* CLOSE BUTTON */}
                             <button
                                 onClick={() => removeRecording(i)}
